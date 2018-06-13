@@ -390,7 +390,7 @@ function generateGroupConstraints(
       c.left.cOut.push(c), c.right.cIn.push(c);
     });
     root.groups.forEach(g => {
-      var gapAdjustment = (g.padding - f.getSize(g.bounds)) / 2;
+      var gapAdjustment = (g.padding + 30 - f.getSize(g.bounds)) / 2;
       g.minVar.cIn.forEach(c => (c.gap += gapAdjustment));
       g.minVar.cOut.forEach(c => {
         c.left = g.maxVar;
