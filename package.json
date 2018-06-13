@@ -1,6 +1,6 @@
 {
-  "name": "webcola",
-  "version": "3.3.8",
+  "name": "@mrijke/webcola",
+  "version": "0.0.0-development",
   "devDependencies": {
     "@types/d3": "^4.5.0",
     "@types/jquery": "^2.0.40",
@@ -28,19 +28,23 @@
     "tsify": "^2.0.8",
     "typedoc": "^0.5.10",
     "typescript": "^2.6.1",
-    "uglify-js": "^2.4.16"
+    "uglify-js": "^2.4.16",
+    "travis-deploy-once": "^5.0.0",
+    "semantic-release": "^15.5.2"
   },
-  "description": "WebCola =======",
+  "description": "WebCola",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "grunt full",
-    "prepublish": "grunt ts:commonjs browserify:dist uglify"
+    "prepublish": "grunt ts:commonjs browserify:dist uglify",
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tgdwyer/WebCola.git"
+    "url": "https://github.com/mrijke/WebCola.git"
   },
   "keywords": [
     "Graph",
@@ -51,9 +55,9 @@
   "author": "Tim Dwyer",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tgdwyer/WebCola/issues"
+    "url": "https://github.com/mrijke/WebCola/issues"
   },
-  "homepage": "https://github.com/tgdwyer/WebCola",
+  "homepage": "https://github.com/mrijke/WebCola",
   "dependencies": {
     "d3-dispatch": "^1.0.3",
     "d3-drag": "^1.0.4",

@@ -1,6 +1,21 @@
 language: node_js
+cache:
+  directories:
+    - ~/.npm
+notifications:
+  email: false
 node_js:
-  - "7.2.0"
+  - '9'
+  - '8'
+  - '6'
+  - '4'
 install:
   - npm install
   - npm install -g grunt-cli
+script:
+  - npm run test
+after_success:
+  - npm run travis-deploy-once "npm run semantic-release"
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
