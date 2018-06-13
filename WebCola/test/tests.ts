@@ -228,7 +228,7 @@ window.onload = function() {
     assert.ok(approxEquals((<any>g).bounds.width(), 30, 0.1));
     assert.ok(approxEquals((<any>g).bounds.height(), 40, 0.1));
     assert.ok(
-      approxEquals(Math.abs(u.x - v.x), 20, 0.1),
+      approxEquals(Math.abs(u.x - v.x), 35, 0.1),
       "u.x: " + u.x + " v.x: " + v.x
     );
   });
