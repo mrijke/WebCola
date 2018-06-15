@@ -66,9 +66,15 @@ export interface Node extends InputNode {
 }
 
 export interface Group {
-  bounds?: Rectangle;
+  bounds: Rectangle;
   leaves?: Node[];
   groups?: Group[];
+  padding: number;
+}
+
+export interface InputGroup {
+  leaves?: number[];
+  groups?: number[];
   padding: number;
 }
 
@@ -89,10 +95,12 @@ export interface Link<NodeRefType> {
   weight?: number;
 }
 
-export type LinkNumericPropertyAccessor = (t: Link<Node | number>) => number;
+export type LinkNumericPropertyAccessor = (
+  t: Link<InputNode | number>
+) => number;
 
 export interface LinkLengthTypeAccessor
-  extends LinkLengthAccessor<Link<Node | number>> {
+  extends LinkLengthAccessor<Link<InputNode | number>> {
   getType: LinkNumericPropertyAccessor;
 }
 /**
@@ -113,7 +121,7 @@ export class Layout {
   private _nodes = [];
   private _groups = [];
   private _rootGroup = null;
-  private _links: Link<Node | number>[] = [];
+  private _links: Link<InputNode | number>[] = [];
   private _constraints = [];
   private _distanceMatrix = null;
   private _descent: Descent = null;
@@ -250,8 +258,8 @@ export class Layout {
    * @default empty list
    */
   groups(): Array<Group>;
-  groups(x: Array<Group>): this;
-  groups(x?: Array<Group>): any {
+  groups(x: Array<InputGroup>): this;
+  groups(x?: Array<InputGroup>): any {
     if (!x) return this._groups;
     this._groups = x;
     this._rootGroup = {};
@@ -345,9 +353,9 @@ export class Layout {
    * @property links {array}
    * @default empty list
    */
-  links(): Array<Link<Node | number>>;
-  links(x: Array<Link<Node | number>>): this;
-  links(x?: Array<Link<Node | number>>): any {
+  links(): Array<Link<InputNode | number>>;
+  links(x: Array<Link<InputNode | number>>): this;
+  links(x?: Array<Link<InputNode | number>>): any {
     if (!arguments.length) return this._links;
     this._links = x;
     return this;
@@ -474,7 +482,7 @@ export class Layout {
     }
   }
 
-  getLinkLength(link: Link<Node | number>): number {
+  getLinkLength(link: Link<InputNode | number>): number {
     return typeof this._linkDistance === "function"
       ? +(<LinkNumericPropertyAccessor>this._linkDistance)(link)
       : <number>this._linkDistance;
@@ -879,14 +887,14 @@ export class Layout {
   }
 
   //The link source and target may be just a node index, or they may be references to nodes themselves.
-  static getSourceIndex(e: Link<Node | number>): number {
+  static getSourceIndex(e: Link<InputNode | number>): number {
     return typeof e.source === "number"
       ? <number>e.source
       : (<Node>e.source).index;
   }
 
   //The link source and target may be just a node index, or they may be references to nodes themselves.
-  static getTargetIndex(e: Link<Node | number>): number {
+  static getTargetIndex(e: Link<InputNode | number>): number {
     return typeof e.target === "number"
       ? <number>e.target
       : (<Node>e.target).index;
