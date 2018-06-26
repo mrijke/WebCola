@@ -165,7 +165,9 @@ export class Layout {
    * iterate the layout.  Returns true when layout converged.
    */
   protected tick(): boolean {
-    if (this._alpha < this._threshold) {
+    // when setting convergenceThreshold to a high value somehow alpha gets set to 0.1
+    // and the simulation is not doing anything
+    if (this._alpha < this._threshold && this._alpha !== 0.1) {
       this._running = false;
       this.trigger({
         type: EventType.end,
