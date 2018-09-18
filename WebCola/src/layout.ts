@@ -548,13 +548,15 @@ export class Layout {
    * @param {number} [initialAllConstraintsIterations=0] initial layout iterations with all constraints including non-overlap
    * @param {number} [gridSnapIterations=0] iterations of "grid snap", which pulls nodes towards grid cell centers - grid of size node[0].width - only really makes sense if all nodes have the same width and height
    * @param [keepRunning=true] keep iterating asynchronously via the tick method
+   * @param [centerGraph=true] Center graph on restart
    */
   start(
     initialUnconstrainedIterations: number = 0,
     initialUserConstraintIterations: number = 0,
     initialAllConstraintsIterations: number = 0,
     gridSnapIterations: number = 0,
-    keepRunning = true
+    keepRunning = true,
+    centerGraph = true
   ): this {
     var i: number,
       j: number,
@@ -693,7 +695,7 @@ export class Layout {
         curConstraints
       ).projectFunctions();
     this._descent.run(initialUserConstraintIterations);
-    this.separateOverlappingComponents(w, h);
+    this.separateOverlappingComponents(w, h, centerGraph);
 
     // subsequent iterations will apply all constraints
     this.avoidOverlaps(ao);
@@ -731,7 +733,7 @@ export class Layout {
     }
 
     this.updateNodePositions();
-    this.separateOverlappingComponents(w, h);
+    this.separateOverlappingComponents(w, h, centerGraph);
     return keepRunning ? this.resume() : this;
   }
 
@@ -783,7 +785,11 @@ export class Layout {
   }
 
   // recalculate nodes position for disconnected graphs
-  private separateOverlappingComponents(width: number, height: number): void {
+  private separateOverlappingComponents(
+    width: number,
+    height: number,
+    centerGraph: boolean = true
+  ): void {
     // recalculate nodes position for disconnected graphs
     if (!this._distanceMatrix && this._handleDisconnected) {
       let x = this._descent.x[0],
@@ -792,7 +798,14 @@ export class Layout {
         (v.x = x[i]), (v.y = y[i]);
       });
       var graphs = separateGraphs(this._nodes, this._links);
-      applyPacking(graphs, width, height, this._defaultNodeSize);
+      applyPacking(
+        graphs,
+        width,
+        height,
+        this._defaultNodeSize,
+        1,
+        centerGraph
+      );
       this._nodes.forEach((v, i) => {
         (this._descent.x[0][i] = v.x), (this._descent.x[1][i] = v.y);
         if (v.bounds) {
